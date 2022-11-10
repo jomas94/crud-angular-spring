@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { first, tap } from 'rxjs';
+import { first } from 'rxjs';
 
 import { Course } from '../model/course';
 
@@ -37,4 +37,11 @@ export class CoursesService {
   private update(record: Partial<Course>){
     return this.httpClient.put<Course>(`${this.API}/${record._id}`, record).pipe(first());
   }
+
+  delete(id:string ){
+    console.log(id);
+
+    return this.httpClient.delete(`${this.API}/${id}`).pipe(first());
+  }
+
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,7 +37,7 @@ public class CourseController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Course> finfById(@PathVariable Long id){
+    public ResponseEntity<Course> finfById(@PathVariable("id") Long id){
         
         return courseRepository.findById(id)
             .map(course -> ResponseEntity.ok().body(course))
@@ -48,7 +49,7 @@ public class CourseController {
     //@RequestMapping(method = RequestMethod.POST)
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public Course create(@PathVariable Long id ){ 
+    public Course create(@RequestBody Course course ){ 
         return courseRepository.save(course);
         //return ResponseEntity.status(HttpStatus.CREATED)
         //  .body(courseRepository.save(course));
@@ -56,13 +57,30 @@ public class CourseController {
     }
 
     
-    @PutMapping
-    @ResponseStatus(code = HttpStatus.OK)
-    public Course update(@RequestBody Course course ){ 
-        return   courseRepository.save(course);
-        //return ResponseEntity.status(HttpStatus.CREATED)
-        //  .body(courseRepository.save(course));
+    @PutMapping("/{id}")
+   // @ResponseStatus(code = HttpStatus.OK)
+    public ResponseEntity<Course>  update(@PathVariable Long id,
+            @RequestBody Course course){ 
+        return courseRepository.findById(id)
+        .map(courseFounded -> {
+            courseFounded.setName(course.getName());
+            courseFounded.setCategory(course.getCategory());
+            Course updated = courseRepository.save(courseFounded);
+            return ResponseEntity.ok().body(updated);
+        })
+        .orElse(ResponseEntity.notFound().build());
 
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id){
+        
+        return courseRepository.findById(id)
+        .map(courseFounded -> {
+            courseRepository.deleteById(id);
+            return ResponseEntity.noContent().<Void>build();
+        })
+        .orElse(ResponseEntity.notFound().build()); 
     }
    
     
