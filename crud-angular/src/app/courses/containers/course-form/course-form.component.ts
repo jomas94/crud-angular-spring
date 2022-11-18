@@ -1,11 +1,12 @@
 import { Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { NonNullableFormBuilder } from '@angular/forms';
+import { NonNullableFormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 
 import { CoursesService } from '../../services/courses.service';
 import { Course } from '../../model/course';
+import { CdkPortal } from '@angular/cdk/portal';
 
 @Component({
   selector: 'app-course-form',
@@ -16,8 +17,10 @@ export class CourseFormComponent implements OnInit {
 
   form = this.formBuilder.group({
     _id: [''],
-    name: [''],
-    category: ['']
+    name: ['', [Validators.required,
+      Validators.minLength(2),
+      Validators.maxLength(100)]],
+    category: ['', Validators.required]
   });
 
   constructor(private formBuilder: NonNullableFormBuilder,
@@ -31,7 +34,10 @@ export class CourseFormComponent implements OnInit {
   ngOnInit(): void {
     const course: Course = this.route.snapshot.data['course'];
     console.log(course);
-    this.form.setValue(course);
+    this.form.setValue({
+      _id: course._id,
+      name: course.name,
+      category: ''    });
 
   }
 
@@ -54,6 +60,24 @@ export class CourseFormComponent implements OnInit {
 
   private onError(){
     this.snackBar.open('Error saving course', '', {duration: 3000})
+  }
+
+  getErrorMessage(fieldname: string){
+    const field = this.form.get(fieldname);
+
+    if(field?.hasError('required')){
+      return 'Required field';
+    }
+    if(field?.hasError('minlength')){
+      const requiredLength:number = field.errors ? field.errors['minlength']['requiredLength'] : 2;
+      return `The minimum of characters required is ${requiredLength}`;
+    }
+    if(field?.hasError('maxlength')){
+      const requiredLength:number = field.errors ? field.errors['maxlength']['requiredLength'] : 100;
+      return `Exceeded max of ${requiredLength} characters. `;
+    }
+
+    return 'Invalid field'
   }
 
 }

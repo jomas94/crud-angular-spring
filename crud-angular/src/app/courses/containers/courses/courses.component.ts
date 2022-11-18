@@ -66,8 +66,8 @@ export class CoursesComponent implements OnInit {
           duration: 3000,
           verticalPosition: 'top',
           horizontalPosition: 'center'
-        });
-        this.refresh();
+        })
+        this.refresh()
       },
       error => this.onError("Error on try to delete course.")
 
