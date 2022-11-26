@@ -4,9 +4,8 @@ import { NonNullableFormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 
-import { CoursesService } from '../../services/courses.service';
 import { Course } from '../../model/course';
-import { CdkPortal } from '@angular/cdk/portal';
+import { CoursesService } from '../../services/courses.service';
 
 @Component({
   selector: 'app-course-form',
@@ -18,9 +17,9 @@ export class CourseFormComponent implements OnInit {
   form = this.formBuilder.group({
     _id: [''],
     name: ['', [Validators.required,
-      Validators.minLength(2),
+      Validators.minLength(1),
       Validators.maxLength(100)]],
-    category: ['', Validators.required]
+    category: ['', Validators.required, Validators.minLength(1)]
   });
 
   constructor(private formBuilder: NonNullableFormBuilder,

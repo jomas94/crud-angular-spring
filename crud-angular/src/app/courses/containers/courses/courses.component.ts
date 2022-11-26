@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { ConfirmationDialogComponent } from 'src/app/shared/components/confirmation-dialog/confirmation-dialog.component';
 
 import { ErrorDialogComponent } from '../../../shared/components/error-dialog/error-dialog.component';
 import { Course } from '../../model/course';
@@ -15,7 +16,7 @@ import { CoursesService } from '../../services/courses.service';
   templateUrl: './courses.component.html',
   styleUrls: ['./courses.component.scss']
 })
-export class CoursesComponent implements OnInit {
+export class CoursesComponent  {
 
 
   courses$:Observable <Course[]> | null = null;
@@ -46,9 +47,7 @@ export class CoursesComponent implements OnInit {
     this.dialog.open(ErrorDialogComponent, { data: errorMsg} );
   }
 
-  ngOnInit(): void {
 
-  }
 
   onAdd(){
     this.router.navigate(['new'], { relativeTo: this.routeAct});
@@ -60,18 +59,32 @@ export class CoursesComponent implements OnInit {
 
   onDelete(course: Course){
 
-    this.coursesService.delete(course._id).subscribe(
-      () => {
-        this.snackBar.open('Course deleted.', 'X',{
-          duration: 3000,
-          verticalPosition: 'top',
-          horizontalPosition: 'center'
-        })
-        this.refresh()
-      },
-      error => this.onError("Error on try to delete course.")
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+     // width: '250px',
+      data: `Are you sure you want delete ${course.name}`,
+    });
 
-    );
+    dialogRef.afterClosed().subscribe((result:boolean) => {
+      if(result){
+        this.coursesService.delete(course._id).subscribe(
+          () => {
+            this.snackBar.open('Course deleted.', 'X',{
+              duration: 3000,
+              verticalPosition: 'top',
+              horizontalPosition: 'center'
+            })
+            this.refresh()
+          },
+          error => this.onError("Error on try to delete course.")
+
+        );
+
+      }
+    });
   }
 
+
+
 }
+
+

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { first } from 'rxjs';
+import { first, tap } from 'rxjs';
 
 import { Course } from '../model/course';
 
@@ -16,13 +16,14 @@ export class CoursesService {
     return this.httpClient.get<Course[]>(this.API).pipe(
       first(),
       //delay(3000),
-      //tap((courses) => console.log(courses))
+     // tap((courses) => console.log(courses))
     );
   }
 
   findById(id: string) {
     return this.httpClient.get<Course>(`${this.API}/${id}`); //.pipe(first());
   }
+
   save(record: Partial<Course>) {
     if (record._id){
       return this.update(record);
