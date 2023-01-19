@@ -25,6 +25,7 @@ public class CrudSpringApplication {
 
 			c.setName("Angular with Spring");
 			c.setCategory("Front-end");
+			//c.setDeleted(false);
 
 			courseRepository.save(c);
 
