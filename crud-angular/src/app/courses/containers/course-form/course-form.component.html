@@ -14,8 +14,8 @@
 
         <mat-select formControlName="category">
           <mat-option ></mat-option>
-          <mat-option value="Front-End">Front-End</mat-option>
-          <mat-option value="Back-End">Back-End</mat-option>
+          <mat-option value="Front-end">Front-end</mat-option>
+          <mat-option value="Back-end">Back-end</mat-option>
         </mat-select>
         <mat-error *ngIf="form.get('name')?.invalid">{{getErrorMessage('category')}}</mat-error>
       </mat-form-field>
@@ -24,7 +24,7 @@
 
   <mat-card-actions>
     <button mat-raised-button color="primary" (click)="onSubmit()">SAVE</button>
-    <button mat-raised-button (click)="onCancel()">CANCEL</button>
+    <button mat-raised-button (click)="onCancel()" class="btn-space">CANCEL</button>
   </mat-card-actions>
 
 
