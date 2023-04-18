@@ -45,14 +45,13 @@ public class CourseController {
     public @ResponseBody List<Course> list(){
         
         return courseService.list();
-    }
+    } 
 
     @GetMapping("/{id}")
-    public ResponseEntity<Course> finfById(@PathVariable("id") @NotNull @Positive Long id){
+    public Course finfById(@PathVariable("id") @NotNull @Positive Long id){
         
-        return courseService.findById(id)
-            .map(course -> ResponseEntity.ok().body(course))
-            .orElse(ResponseEntity.notFound().build());
+        return courseService.findById(id);
+            
     }
 
     

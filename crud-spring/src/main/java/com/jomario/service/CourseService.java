@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import com.jomario.exception.RecordNotFoundeException;
 import com.jomario.model.Course;
 import com.jomario.repository.CourseRepository;
 
@@ -28,9 +29,9 @@ public class CourseService {
     }
     
 
-    public Optional<Course> findById(@PathVariable @NotNull @Positive  Long id){
+    public Course findById(@PathVariable @NotNull @Positive  Long id){
         
-        return courseRepository.findById(id);
+        return courseRepository.findById(id).orElseThrow(() ->  new RecordNotFoundeException(id) );
     }
 
     public Course create( @Valid Course course ){ 
