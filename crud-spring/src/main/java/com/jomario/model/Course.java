@@ -21,8 +21,7 @@ import lombok.Data;
 //@Getter
 //@Setter
 @Data
-@Entity
-
+@Entity 
 @SQLDelete(sql = "UPDATE Course SET deleted = true WHERE id = ?")
 @Where(clause ="deleted = false ")
 public class Course {
