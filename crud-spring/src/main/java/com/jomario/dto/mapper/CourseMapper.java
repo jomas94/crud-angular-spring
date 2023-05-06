@@ -3,6 +3,7 @@ package com.jomario.dto.mapper;
 import org.springframework.stereotype.Component;
 
 import com.jomario.dto.CourseDTO;
+import com.jomario.enums.Category;
 import com.jomario.model.Course;
 
 @Component
@@ -14,7 +15,7 @@ public class CourseMapper {
         if(course == null){
             return null;
         }
-        return new CourseDTO(course.getId(), course.getName(), course.getCategory());
+        return new CourseDTO(course.getId(), course.getName(), course.getCategory().getValue());
     }
 
     public Course toEntity(CourseDTO courseDTO){
@@ -29,9 +30,21 @@ public class CourseMapper {
             course.setId(courseDTO.id());
         } 
         course.setName(courseDTO.name());
-        course.setCategory(courseDTO.category());
+        course.setCategory(convertCategoryValue(courseDTO.category()));
         
         return course;
+    }
+
+    public Category convertCategoryValue(String value){
+        if(value == null){
+            return null;
+        }
+
+        return switch (value) {
+            case "Front-end" -> Category.FRONTEND;
+            case "Back-end" -> Category.BACKEND;
+            default -> throw new IllegalArgumentException("Category invalid: " + value);
+        }; 
     }
 
 

@@ -5,6 +5,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import com.jomario.enums.Category;
+import com.jomario.enums.Status;
 import com.jomario.model.Course;
 import com.jomario.repository.CourseRepository;
 
@@ -24,8 +26,9 @@ public class CrudSpringApplication {
 			Course c = new Course();
 
 			c.setName("Angular with Spring");
-			c.setCategory("Front-end");
-			//c.setDeleted(false);
+			c.setCategory(Category.FRONTEND);
+			c.setStatus(Status.ACTIVE);
+
 
 			courseRepository.save(c);
 

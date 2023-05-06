@@ -1,10 +1,10 @@
 package com.jomario.exception;
 
-public class RecordNotFoundeException extends RuntimeException {
+public class RecordNotFoundException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
   
-    public RecordNotFoundeException(Long id ) {
+    public RecordNotFoundException(Long id ) {
         super("Id "+id + " not found.");
     }
     
